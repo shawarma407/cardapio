@@ -339,7 +339,7 @@ a.navbar-brand{
   height: 390px;
   width: 390px;
   border-radius: 120px;
-  background-image: url("/cardapio/img/imgdepoimentos.jpg");
+  background-image: url("../img/imgdepoimentos.jpg");
   background-position: center;
   position: absolute;
   left: 0;
