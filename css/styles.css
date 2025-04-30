@@ -148,20 +148,16 @@ a.navbar-brand{
 }
 
 .card-banner{
-  height: 450px;
-  width: 450px;
+  height: 550px;
+  width: 600px;
   border-radius: 170px;
   background-color: #f4c949;
   position: absolute;
-  right: 0;
+  right: -20;
   top: -80px;
-}
-
-.img-banner img{
-  position: absolute;
-  width: 425px;
-  top: -170px;
-  right: 30px;
+  background-image: url("../img/fotocardBanner.jpg");
+  background-position: bottom;
+  background-size: cover;
 }
 
 .card{

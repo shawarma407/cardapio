@@ -379,40 +379,6 @@ cardapio.metodos = {
     cardapio.metodos.carregarEtapa(2);
   },
 
-  // API ViaCEP
-  buscarCep: () => {
-    // Cria uma váriável com o valor do cep
-    var cep = $("#txtCEP").val().trim().replace(/\D/g, '');
-
-    // Verifica se o cep possui valor informado
-    if(cep != ""){
-      var validacep = /^[0-9]{8}$/;
-
-      if(validacep.test(cep)){
-        $.getJSON(`https://viacep.com.br/ws/${cep}/json/?callback=?`, (dados) => {
-          if(!("erro" in dados)){
-            //Atualiza campos e valores retornados
-            $("#txtEndereco").val(dados.logradouro)
-            $("#txtBairro").val(dados.bairro)
-            $("#txtCidade").val(dados.localidade)
-            $("#txtUf").val(dados.uf)
-            $("#txtNumero").focus()
-
-          }else{
-            cardapio.metodos.mensagem("CEP não envontrado. Preencha as informações manualmente")
-            $("#txtEndereco").focus();
-          }
-        })
-      }else{
-        cardapio.metodos.mensagem("Formato do CEP inválido.")
-        $("#txtCEP").focus();
-      }
-    }else{
-      cardapio.metodos.mensagem("Informe o CEP, por favor!");
-      $("#txtCEP").focus();
-    }
-  },
-
   AtualizarValorEntrega: () => {
     let bairro = $("#txtBairro").val().trim();
     let valor = VALORES_ENTREGA[bairro]
@@ -423,19 +389,10 @@ cardapio.metodos = {
 
   // Validação antes de prosseguir para etapa 3
   resumoPedido: () => {
-    let cep = $("#txtCEP").val().trim();
     let endereco = $("#txtEndereco").val().trim();
     let bairro = $("#txtBairro").val().trim();
-    let cidade = $("#txtCidade").val().trim();
-    let uf = $("#ddlUf").val().trim();
     let numero = $("#txtNumero").val().trim();
     let complemento = $("#txtComplemento").val().trim();
-
-    if(cep.length <= 0 ){
-      cardapio.metodos.mensagem("Informe o CEP, por favor")
-      $("#txtCEP").focus();
-      return;
-    }
 
     if(endereco.length <= 0 ){
       cardapio.metodos.mensagem("Informe o Endereço, por favor")
@@ -448,19 +405,6 @@ cardapio.metodos = {
       $("#txtBairro").focus();
       return;
     }
-
-    if(cidade.length <= 0 ){
-      cardapio.metodos.mensagem("Informe a Cidade, por favor")
-      $("#txtCidade").focus();
-      return;
-    }
-
-    if(uf == "-1" ){
-      cardapio.metodos.mensagem("Informe a UF, por favor")
-      $("#ddlUf").focus();
-      return;
-    }
-
     
     if(numero.length <= 0 ){
       cardapio.metodos.mensagem("Informe o Número, por favor")
@@ -469,11 +413,8 @@ cardapio.metodos = {
     }
 
     MEU_ENDERECO = {
-      cep: cep,
       endereco: endereco,
       bairro: bairro,
-      cidade: cidade,
-      uf: uf,
       numero: numero,
       complemento: complemento
     }
@@ -496,7 +437,7 @@ cardapio.metodos = {
     });
 
     $("#resumoEndereco").html(`${MEU_ENDERECO.endereco}, ${MEU_ENDERECO.numero}, ${MEU_ENDERECO.bairro}`)
-    $("#cidadeEndereco").html(`${MEU_ENDERECO.cidade}-${MEU_ENDERECO.uf} / ${MEU_ENDERECO.cep} ${MEU_ENDERECO.complemento}`)
+    $("#cidadeEndereco").html(`${MEU_ENDERECO.complemento}`)
 
     cardapio.metodos.finalizarPedido()
   },
@@ -537,11 +478,9 @@ cardapio.metodos = {
         texto += `🏠 *Endereço de Entrega:*\n`;
         texto += `   ${MEU_ENDERECO.endereco}, ${MEU_ENDERECO.numero}\n`;
         texto += `   ${MEU_ENDERECO.bairro}\n`;
-        texto += `   ${MEU_ENDERECO.cidade}-${MEU_ENDERECO.uf}, ${MEU_ENDERECO.cep}\n`;
         if (MEU_ENDERECO.complemento) {
             texto += `   Complemento: ${MEU_ENDERECO.complemento}\n`;
         }
-
         // Converte para URL do WhatsApp
         let encode = encodeURIComponent(texto);
         let URL = `https://wa.me/${CELULAR_EMPRESA}?text=${encode}`;
@@ -607,8 +546,7 @@ cardapio.templates = {
       <div class="img-produto">
         <img src="\${img}"/>
       </div>
-      <div class="info-content d-flex flex-column">
-       <p class="title-produto text-center">
+       <p class="title-produto text-center mt-4">
          <b>\${nome}</b>
        </p>
        <div class="add-carrinho d-flex">
@@ -617,7 +555,6 @@ cardapio.templates = {
         </div>
         <span class="btn btn-add" onclick="cardapio.metodos.abrirModalAdicionais('\${id}')"><i class="fa fa-shopping-bag"></i></span>
        </div>
-      </div>
     </div>
   </div>
   `,
