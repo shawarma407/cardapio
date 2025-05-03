@@ -17,6 +17,7 @@ var VALORES_ENTREGA = {
   VilaMariano1: 8,
   VilaMariano2: 10,
   NovabarraEFreiDamiao: 10,
+  Centro: 6,
   Trizidela: 6,
   Ceramica: 6,
   Araticum: 6,
